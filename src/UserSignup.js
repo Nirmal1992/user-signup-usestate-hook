@@ -1,25 +1,37 @@
-import React, { useState } from 'react';
+import React, { useState } from "react";
 
-import './UserSignup.css';
+import "./UserSignup.css";
+import useSetState from "./useSetState";
+
+const initialState = {
+  userName: "",
+  email: "",
+  password: "",
+  passwordConfirmation: "",
+  investmentInterest: false
+};
 
 const UserSignup = () => {
-  const [userName, setUserName] = useState('');
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [passwordConfirmation, setPasswordConfirmation] = useState('');
-  const [investmentInterest, setInvestmentInterest] = useState(false);
+  const [
+    { email, userName, passwordConfirmation, password, investmentInterest },
+    setState
+  ] = useSetState(initialState);
 
   const handleSubmit = event => {
     event.preventDefault();
     clear();
   };
 
+  const handleChange = e => {
+    if (e.target.type === "checkbox") {
+      setState({ [e.target.name]: e.target.checked });
+    } else {
+      setState({ [e.target.name]: e.target.value });
+    }
+  };
+
   const clear = () => {
-    setUserName('');
-    setEmail('');
-    setPassword('');
-    setPasswordConfirmation('');
-    setInvestmentInterest(false);
+    setState(initialState);
   };
 
   return (
@@ -31,9 +43,7 @@ const UserSignup = () => {
         type="text"
         value={userName}
         required
-        onChange={event => {
-          setUserName(event.target.value);
-        }}
+        onChange={handleChange}
       />
       <label htmlFor="email">Email Address</label>
       <input
@@ -42,9 +52,7 @@ const UserSignup = () => {
         type="email"
         value={email}
         required
-        onChange={event => {
-          setEmail(event.target.value);
-        }}
+        onChange={handleChange}
       />
       <label htmlFor="password">Password</label>
       <input
@@ -53,9 +61,7 @@ const UserSignup = () => {
         type="password"
         value={password}
         required
-        onChange={event => {
-          setPassword(event.target.value);
-        }}
+        onChange={handleChange}
       />
       <label htmlFor="passwordConfirmation">Confirm Password</label>
       <input
@@ -64,9 +70,7 @@ const UserSignup = () => {
         type="password"
         value={passwordConfirmation}
         required
-        onChange={event => {
-          setPasswordConfirmation(event.target.value);
-        }}
+        onChange={handleChange}
       />
       <label htmlFor="investmentInterest" className="UserSignup--checkbox">
         <input
@@ -74,7 +78,7 @@ const UserSignup = () => {
           name="investmentInterest"
           type="checkbox"
           checked={investmentInterest}
-          onChange={event => setInvestmentInterest(event.target.checked)}
+          onChange={handleChange}
         />
         Do you want to maybe help us out with an angel investment?
       </label>
